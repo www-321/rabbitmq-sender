@@ -1,6 +1,5 @@
 package com.ttlrabbitmq.demo.rabbitmq;
 
-import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.Message;
@@ -8,12 +7,10 @@ import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-
-@RefreshScope
 @RestController
 public class ProductController {
 
@@ -96,8 +93,5 @@ public class ProductController {
        return nssaConfig.getIp() + nssaConfig.getPort()+"***********";
     }
 
-    @PostMapping(value = "addUser")
-    public String add(@RequestBody JSONObject s, HttpServletRequest request) {
-        return s.getString("name");
-    }
+
 }

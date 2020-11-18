@@ -25,7 +25,7 @@ public class MessageSend {
                 .setContentType(MessageProperties.CONTENT_TYPE_JSON)
                 .setHeader("x-delay", 3000)
                 .build();
-        rabbitTemplate.convertAndSend("delayExchange", "dead_routing_key", me);
+        rabbitTemplate.convertAndSend("customDirectExchange", "custom_routing_key", me);
 
     }
 
