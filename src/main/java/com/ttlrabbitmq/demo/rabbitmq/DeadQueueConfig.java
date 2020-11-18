@@ -13,11 +13,11 @@ import java.util.Map;
 @Configuration
 public class DeadQueueConfig {
 
-    @Bean("customDirectExchange")
-    public CustomExchange customDirectExchange() {
+    @Bean
+    public Exchange customDirectExchange() {
         Map<String,Object> args=new HashMap<>();
-        args.put("x-delay-type","direct");
-        return new CustomExchange("test_exchange","x-delayed-message",true,false,args);
+        args.put("x-delayed-type","direct");
+        return new CustomExchange("dead_exchange_1","x-delayed-message",true,false,args);
     }
 
     /*
@@ -25,12 +25,12 @@ public class DeadQueueConfig {
      */
     @Bean
     public Queue customQueue() {
-        return new Queue("custom_queue_1", true);
+        return QueueBuilder.durable("dead_queue_1").build();
     }
 
     @Bean
     public Binding customBuinding() {
-        return BindingBuilder.bind(customQueue()).to(customDirectExchange()).with("custom_routing_key").noargs();
+        return BindingBuilder.bind(customQueue()).to(customDirectExchange()).with("dead_routing_key").noargs();
     }
 
 
