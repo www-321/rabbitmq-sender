@@ -15,7 +15,7 @@ public class DeadQueueConfig {
 
     @Bean
     public Exchange customDirectExchange() {
-        Map<String,Object> args=new HashMap<>();
+        Map<String, Object> args = new HashMap<>();
         args.put("x-delayed-type","direct");
         return new CustomExchange("dead_exchange_1","x-delayed-message",true,false,args);
     }

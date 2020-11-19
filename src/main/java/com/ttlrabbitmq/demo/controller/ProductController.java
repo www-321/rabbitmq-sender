@@ -1,7 +1,10 @@
-package com.ttlrabbitmq.demo.rabbitmq;
+package com.ttlrabbitmq.demo.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ttlrabbitmq.demo.rabbitmq.MessageSend;
+import com.ttlrabbitmq.demo.rabbitmq.NssaConfig;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageProperties;
@@ -14,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ProductController {
 
+
+    @Autowired
+    private MessageSend messageSend;
 
     @Autowired
     private NssaConfig nssaConfig;
@@ -74,7 +80,13 @@ public class ProductController {
 
 
 
+    @GetMapping("delay")
+    public void delay() {
+        JSONObject o = new JSONObject();
+        o.put("name", "wuquan");
+        messageSend.send(o.toJSONString());
 
+    }
 
 
 
