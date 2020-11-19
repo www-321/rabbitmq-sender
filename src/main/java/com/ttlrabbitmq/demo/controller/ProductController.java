@@ -89,7 +89,13 @@ public class ProductController {
     }
 
 
+    @GetMapping("delay2")
+    public void dela2y() {
+        JSONObject o = new JSONObject();
+        o.put("name", "wuquan");
+        messageSend.send2(o.toJSONString());
 
+    }
 
 
 
