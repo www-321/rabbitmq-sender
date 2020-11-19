@@ -9,10 +9,13 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 @RestController
 public class ProductController {
@@ -29,15 +32,32 @@ public class ProductController {
     RabbitTemplate rabbitTemplate;
 
     @GetMapping("send")
-    public void send() throws JsonProcessingException {
+    public void send(String id) throws JsonProcessingException {
+        CorrelationData correlationData = new CorrelationData();
+        correlationData.setId("wwwwww-123"+id);
+        ObjectMapper objectMapper = new ObjectMapper();
+        byte[] ssses = objectMapper.writeValueAsBytes("sss"+id);
+        Message message = MessageBuilder.withBody(ssses)
+                .setHeader("token","token123")
+                .setContentType(MessageProperties.CONTENT_TYPE_JSON)
+                .build();
+        rabbitTemplate.convertAndSend("directExchange", "directKey", message, correlationData);
+    }
+
+    @GetMapping("send_error")
+    public void sendError() throws JsonProcessingException {
+        CorrelationData correlationData = new CorrelationData();
+        correlationData.setId("wwwwww-123");
         ObjectMapper objectMapper = new ObjectMapper();
         byte[] ssses = objectMapper.writeValueAsBytes("sss");
         Message message = MessageBuilder.withBody(ssses)
                 .setHeader("token","token123")
                 .setContentType(MessageProperties.CONTENT_TYPE_JSON)
                 .build();
-        rabbitTemplate.convertAndSend("directExchange","directKey",  message);
+        //故意出错，触发returnback回调
+        rabbitTemplate.convertAndSend("directExchange", "directKey_error", message, correlationData);
     }
+
 
     @GetMapping("send_topic")
     public void send1() throws JsonProcessingException {
